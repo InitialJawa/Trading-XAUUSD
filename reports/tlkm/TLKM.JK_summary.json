@@ -1,0 +1,12 @@
+{
+  "ticker": "TLKM.JK",
+  "name": "TLKM",
+  "bars": 5342,
+  "start": "2004-09-28",
+  "end": "2026-06-08",
+  "bh_return": "14.06%",
+  "bh_vol": "31.51%",
+  "bh_sharpe": 0.48022320858519923,
+  "t1_candidates": 19,
+  "wf_pass": 0
+}

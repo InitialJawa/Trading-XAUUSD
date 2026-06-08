@@ -1,0 +1,12 @@
+{
+  "ticker": "BBCA.JK",
+  "name": "BBCA",
+  "bars": 5423,
+  "start": "2004-06-08",
+  "end": "2026-06-08",
+  "bh_return": "22.65%",
+  "bh_vol": "29.56%",
+  "bh_sharpe": 0.6629995991403134,
+  "t1_candidates": 116,
+  "wf_pass": 0
+}

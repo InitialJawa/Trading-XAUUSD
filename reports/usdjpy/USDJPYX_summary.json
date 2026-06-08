@@ -1,0 +1,12 @@
+{
+  "ticker": "USDJPY=X",
+  "name": "USDJPY",
+  "bars": 7675,
+  "start": "1996-10-30",
+  "end": "2026-06-05",
+  "bh_return": "1.77%",
+  "bh_vol": "11.52%",
+  "bh_sharpe": 0.09946555749518791,
+  "t1_candidates": 10,
+  "wf_pass": 0
+}

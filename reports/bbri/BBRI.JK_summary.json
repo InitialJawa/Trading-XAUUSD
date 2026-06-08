@@ -1,0 +1,12 @@
+{
+  "ticker": "BBRI.JK",
+  "name": "BBRI",
+  "bars": 5574,
+  "start": "2003-11-10",
+  "end": "2026-06-08",
+  "bh_return": "26.40%",
+  "bh_vol": "37.79%",
+  "bh_sharpe": 0.5416020043008479,
+  "t1_candidates": 71,
+  "wf_pass": 71
+}

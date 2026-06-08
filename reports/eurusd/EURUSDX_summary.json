@@ -1,0 +1,12 @@
+{
+  "ticker": "EURUSD=X",
+  "name": "EURUSD",
+  "bars": 5842,
+  "start": "2003-12-01",
+  "end": "2026-06-08",
+  "bh_return": "0.45%",
+  "bh_vol": "11.02%",
+  "bh_sharpe": 0.10043085341108615,
+  "t1_candidates": 11,
+  "wf_pass": 0
+}

@@ -1,0 +1,12 @@
+{
+  "ticker": "SI=F",
+  "name": "Silver",
+  "bars": 6468,
+  "start": "2000-08-30",
+  "end": "2026-06-08",
+  "bh_return": "15.80%",
+  "bh_vol": "33.01%",
+  "bh_sharpe": 0.6427140241211321,
+  "t1_candidates": 10,
+  "wf_pass": 0
+}

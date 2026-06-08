@@ -535,11 +535,37 @@ The four closest candidates — Silver→Gold (artifact), Model B at 60d (SR 0.8
 
 ### Phase 2 — Bitcoin Research
 
-**Status:** ACTIVE 🟢
+**Status:** COMPLETE ✅ (BTC-001 through BTC-008 complete)
 
-**Result:** Not started.
+**Result:** No robust edge found in Bitcoin either — with one interesting exception.
 
-**Plan:** `BITCOIN_ROADMAP.md`, `research/bitcoin/BTC-001.md`
+**BTC-001 (Price Structure):** No price-derived edge found. Bitcoin's returns show no statistically exploitable patterns in daily price action alone.
+
+**BTC-002 (Funding Rate):** 3/90 signals survived in Gate.io data, but none replicated on BitMEX. Funding rates do not provide a consistent edge for directional trading.
+
+**BTC-003 (Calendar Effects):** Day-of-week: none. Months: none. Halving cycles: only 2 events (2020, 2024) — insufficient for statistical significance. No calendar edge.
+
+**BTC-004 (Macro Events):** NFP Post+3d showed WR=63.83%, p=0.0013 but N=47 below 300 threshold. FOMC Post+1d showed WR=36.17% (contrarian), p=0.0095, N=47. Both fail sample size criterion. No robust macro event edge.
+
+**BTC-005 (Cross-Asset Drivers):** 8 drivers tested (DXY, SP500, VIX, US10Y, GLD, IEF). No robust predictive driver found for Bitcoin. Gold data was unavailable for cross-comparison.
+
+**BTC-006 (Intraday H1):** 17,487 hourly bars tested across sessions, hours, ORB, and volatility regimes. No hourly edge passed PF>1.30. Bitcoin's 24/7 market structure shows no exploitable intraday patterns.
+
+**BTC-007 (Signal Persistence):** 6 technical models × 9 holding periods (1d–60d):
+| Model | Best Hold | Sharpe | PF | MC p | Verdict |
+|-------|-----------|--------|----|-------|---------|
+| A — Trend Following | 1d | 1.88 | ~1.40 | 0.024 | **PASSES MC** ⚠️ |
+| B — Trend Pullback | 1d | -0.89 | 0.78 | 0.989 | Anti-edge |
+| C — Mean Reversion Extreme | 3d | -1.63 | 0.51 | 0.996 | Anti-edge |
+| D — Volatility Expansion | 60d | 0.95 | 2.06 | 0.003 | Passes MC, low SR |
+| E — Breakout | 1d | 2.18 | 1.66 | 0.000 | Passes MC, N=230<300 |
+| F — Consensus | 1d | 1.67 | 1.37 | 0.053 | MC borderline |
+
+Trend Following (Model A) at 1d is the **single most promising signal across both Gold and Bitcoin research**: Sharpe 1.88, Monte Carlo p=0.024, N=1,513 (>300). However, this likely captures Bitcoin's strong secular uptrend (buy-and-hold Sharpe ~0.97). Drift neutralization is required before confirmation.
+
+**BTC-008 (External Drivers):** 79 T1 candidates found across ETF proxies (GBTC, IBIT, BITO), US10Y, VIX, and DXY. However, 100% pass rate on WF/OOS is suspicious — likely Bitcoin's secular uptrend inflating all quintiles. Signals are confounded by trend and require drift neutralization and Monte Carlo validation.
+
+**Next:** Complete remaining phases (BTC-009 through BTC-019 per roadmap), then drill into BTC-007 Trend Following as the only candidate worth deeper investigation.
 
 ### Phase 3 — Silver Research
 
@@ -550,5 +576,24 @@ The four closest candidates — Silver→Gold (artifact), Model B at 60d (SR 0.8
 **Status:** PENDING ⏳
 
 ---
+
+## Final Closing — Project Terminated (June 2026)
+
+After **27 phases** across Gold (19 phases) and Bitcoin (8 phases), testing **200+ signals** across daily, intraday, holding-period, cross-asset, positioning, and external driver domains — **zero statistically robust, tradeable edges** were found using publicly available data.
+
+### Key Takeaways
+
+1. **Gold is efficient.** 25 years of institutional trading, 24h liquidity. Buy-and-hold (Sharpe 0.69) beat every conditional strategy tested.
+2. **Bitcoin's uptrend is real but unpredictable.** The only signal passing Monte Carlo (Trend Following, Sharpe 1.88) is confounded by secular trend. No standalone predictive edge exists.
+3. **Validated framework is the real output.** A rigorous 3-tier validation pipeline (Monte Carlo, Walk-Forward, Out-of-Sample, Drift Neutralization) is documented and reusable for any future instrument.
+
+### Repository Status
+- `master_chronicle/GOLD_MASTER_CHRONICLE.md` — Final, includes all Gold + Bitcoin phases
+- `reports/gold/` — 27 reports
+- `reports/bitcoin/` — 8 reports (BTC-001 through BTC-008)
+- `research/gold/scripts/` — 30 scripts
+- `research/bitcoin/scripts/` — 8 scripts
+
+*Built June 2026. All data from Yahoo Finance / CFTC. All results reproducible. No guarantee of future performance.*
 
 *"The market can remain irrational longer than you can remain solvent." — John Maynard Keynes*

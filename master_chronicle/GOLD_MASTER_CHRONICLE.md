@@ -573,13 +573,28 @@ Trend Following (Model A) at 1d is the **single most promising signal across bot
 
 ### Phase 4 — Oil Research
 
-**Status:** PENDING ⏳
+**Status:** COMPLETE ✅ (8 phases complete)
+
+**Result:** No robust edge found in Crude Oil. Oil is structurally different (zero drift, Sharpe -0.02) but equally unpredictable.
+
+| Phase | Result |
+|-------|--------|
+| OIL-001 (Price Structure) | No edge. Mean return -0.007% daily. Sharpe -0.02. |
+| OIL-002 (Calendar Effects) | No calendar or seasonal edge. |
+| OIL-003 (Macro Events) | No event edge. Supply shocks unpredictable. |
+| OIL-004 (Cross-Asset Drivers) | 4 T1 candidates: DXY Q3 (SR 1.36), USO low (SR 1.15). Need validation. |
+| OIL-005 (Term Structure) | No robust contango/backwardation edge. |
+| OIL-006 (Intraday H1) | No session/hour edge. EIA release has no directional edge. |
+| OIL-007 (Signal Persistence) | ALL models fail. Best Sharpe = 0.44 (Trend Pullback). Trend following is useless on oil. |
+| OIL-008 (External Drivers) | 0 T1 candidates out of 175 signals. |
+
+**Key insight:** Oil's zero drift means signals that work on trending assets collapse to noise here. The only surviving cross-asset signals (DXY Q3) require full validation.
 
 ---
 
-## Final Closing — Project Terminated (June 2026)
+## Final Closing — Project Complete (June 2026)
 
-After **27 phases** across Gold (19 phases) and Bitcoin (8 phases), testing **200+ signals** across daily, intraday, holding-period, cross-asset, positioning, and external driver domains — **zero statistically robust, tradeable edges** were found using publicly available data.
+After **35 phases** across Gold (19 phases), Bitcoin (8 phases), and Oil (8 phases), testing **4,700+ signals** across daily, intraday, holding-period, cross-asset, positioning, term structure, and external driver domains — **zero statistically robust, tradeable edges** were found using publicly available data.
 
 ### Key Takeaways
 
@@ -588,11 +603,14 @@ After **27 phases** across Gold (19 phases) and Bitcoin (8 phases), testing **20
 3. **Validated framework is the real output.** A rigorous 3-tier validation pipeline (Monte Carlo, Walk-Forward, Out-of-Sample, Drift Neutralization) is documented and reusable for any future instrument.
 
 ### Repository Status
-- `master_chronicle/GOLD_MASTER_CHRONICLE.md` — Final, includes all Gold + Bitcoin phases
+- `master_chronicle/GOLD_MASTER_CHRONICLE.md` — Final, includes Gold + Bitcoin + Oil
 - `reports/gold/` — 27 reports
-- `reports/bitcoin/` — 8 reports (BTC-001 through BTC-008)
+- `reports/bitcoin/` — 8 reports
+- `reports/oil/` — 8 reports
 - `research/gold/scripts/` — 30 scripts
 - `research/bitcoin/scripts/` — 8 scripts
+- `research/oil/scripts/` — 8 scripts
+- `data/oil/` — 5 datasets (CL=F, USO, XLE, OIH, Brent)
 
 *Built June 2026. All data from Yahoo Finance / CFTC. All results reproducible. No guarantee of future performance.*
 

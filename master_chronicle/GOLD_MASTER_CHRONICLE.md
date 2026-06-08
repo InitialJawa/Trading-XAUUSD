@@ -521,4 +521,34 @@ The four closest candidates — Silver→Gold (artifact), Model B at 60d (SR 0.8
 
 ---
 
+## Appendix: Program Status (Multi-Asset Framework)
+
+### Phase 1 — Gold Research
+
+**Status:** COMPLETE ✅
+
+**Result:** No robust edge found across 19 phases of systematic testing.
+
+**Archive:** `reports/gold/` (27 reports), `research/gold/scripts/` (30 scripts), `research/gold/charts/` (15 charts)
+
+**Release:** `v1.0` — Gold Research Complete
+
+### Phase 2 — Bitcoin Research
+
+**Status:** ACTIVE 🟢
+
+**Result:** Not started.
+
+**Plan:** `BITCOIN_ROADMAP.md`, `research/bitcoin/BTC-001.md`
+
+### Phase 3 — Silver Research
+
+**Status:** PENDING ⏳
+
+### Phase 4 — Oil Research
+
+**Status:** PENDING ⏳
+
+---
+
 *"The market can remain irrational longer than you can remain solvent." — John Maynard Keynes*

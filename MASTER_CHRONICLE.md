@@ -1,6 +1,6 @@
 # XAU/USD Edge Discovery Framework — Master Chronicle
 
-> *A systematic 15-phase journey through 25.8 years of gold price data, testing 100+ hypotheses, searching for a statistically robust trading edge — and finding none.*
+> *A systematic 19-phase journey through 25.8 years of gold price data, testing 100+ hypotheses, searching for a statistically robust trading edge — and finding none.*
 
 ---
 
@@ -349,5 +349,176 @@ Three models (B, C, F) show MC p < 0.05 at peak hold, meaning directional signal
 ---
 
 *End of Master Chronicle. Research conducted June 2026. All scripts reproducible. All reports generated automatically. No guarantee of future market behavior.*
+
+---
+
+## Phase 17 — COT Positioning Edge Discovery (RESEARCH-014)
+
+**Script:** `research_014_cot_analysis.py`
+**Report:** `RESEARCH-014_COT_Analysis.md`
+**Date:** 2026-06-08
+**Status:** COMPLETE — 0 edges
+
+### Hypothesis
+
+The CFTC Commitments of Traders (COT) report is one of the most widely followed sentiment indicators in commodities. If commercial hedgers (smart money) and managed money speculators systematically position before gold moves, the weekly COT release should have predictive value for future returns.
+
+### Data
+
+- **Source:** CFTC disaggregated futures-only reports, downloaded per-year from CFTC website (comma-separated CSV format)
+- **Period:** 2006-06-13 to 2026-06-02 (1,539 weekly observations)
+- **Groups:** Commercial (producers/hedgers), Managed Money (CTAs/hedge funds), Large Spec (non-commercial), Small Spec (retail)
+- **Metrics per group:** Net long positions computed as (Long - Short) per week
+
+### Tests
+
+1. **Net Position Level (Quintile Analysis):** Q1 (lowest net position) vs Q5 (highest) forward returns at 1w/2w/4w/8w
+2. **Position Change (Delta):** Same analysis on week-over-week position changes
+3. **Divergence:** Commercial vs Managed Money z-score divergence (>1.0 on opposite sides)
+4. **Crowding:** Extreme decile positions (>90th or <10th percentile)
+5. **Regime Analysis:** COT quintiles conditioned on gold price trend (Up/Down/Sideways via 8w EMA + 3% band)
+
+### Key Findings
+
+All quintiles show positive forward returns regardless of COT positioning — reflecting gold's secular uptrend rather than genuine forecasting power. The true test (Q5-Q1 diff) is rarely significant:
+
+- Commercial Q5-Q1 diff: significant only at 8w (p=0.048)
+- Managed Money Q5-Q1 diff: significant at 4w (p=0.034) and 8w (p=0.002) — contrarian (low net position outperforms high)
+- Other groups: not significant at any horizon
+
+**Full Criteria Check (p<0.05, SR>1.0, PF>1.30):** No tests survive all three criteria simultaneously.
+
+### Conclusion
+
+COT positioning data does not provide a reliable predictive edge for gold futures. The apparent significance in raw quintile returns is entirely explained by gold's long-term uptrend. When controlling for this drift via Q5-Q1 difference tests, the signal disappears.
+
+---
+
+## Phase 18 — COT Edge Validation & Reality Check (RESEARCH-015)
+
+**Script:** `research_015_cot_reality_check.py`
+**Report:** `RESEARCH-015_COT_Reality_Check.md`
+**Date:** 2026-06-08
+**Status:** COMPLETE — 0 real edges
+
+### Hypothesis
+
+The 90 candidate signals that survived Test 1 (p<0.05, SR>1.0, PF>1.30, N>100) from RESEARCH-014 might contain genuine edges after rigorous validation. Or they might be statistical artifacts from multiple testing, secular bull bias, or in-sample overfitting.
+
+### Validation Tests (from 440 total signals)
+
+| Test | Description | Pass Rate |
+|------|-------------|-----------|
+| T1 | p<0.05, SR>1.0, PF>1.30, N>100 | 90/440 (20.5%) |
+| T2 | Walk-forward (4 periods, all positive) | 9/90 (10.0%) |
+| T3 | Out-of-sample (2006-2020 train, 2021-2026 test) | 24/90 (26.7%) |
+| T4 | Bonferroni / BH FDR correction | 57/90 (63.3%) |
+| T5 | Monte Carlo (10,000 permutations, p<0.05) | 75/90 (83.3%) |
+| T6 | Gold drift neutralization (alpha vs buy-and-hold) | 1/90 (1.1%) |
+| T7 | Directional consistency (quintile monotonicity) | 0/16 groups (0%) |
+| T8 | Implementable strategy (composite vs BH) | Composite SR ≤ BH |
+
+### Verdict
+
+**0 real edges survive full validation.**
+
+The critical finding: Test 6 (Gold Drift Neutralization) eliminates 89 of 90 candidates. The single signal with positive alpha — "Managed Money Q1_Low 1w" — passes only 2/6 cross-validation tests and lacks directional logic.
+
+The composite strategy (all 90 signals firing simultaneously) barely outperforms buy-and-hold (SR 0.74 vs 0.61 at 1w) while suffering -56% max drawdown. At longer horizons performance degrades further.
+
+Test 7 reveals the underlying pathology: not a single group×horizon combination shows statistically significant quintile monotonicity (all Spearman p > 0.70). The quintile returns follow no logical pattern — Q1 and Q5 are both profitable, Q3 is often negative, the ordering is essentially random. This confirms the conceptual failure: COT positioning does not produce economically consistent signals.
+
+---
+
+## Phase 19 — External Drivers: Term Structure, Real Yields & ETF Flows (RESEARCH-016)
+
+**Script:** `research_016_external_drivers.py`
+**Report:** `RESEARCH-016_External_Drivers.md`
+**Date:** 2026-06-08
+**Status:** COMPLETE — 0 edges
+
+### Hypothesis
+
+If price-only, technical, and positioning signals all fail, perhaps external macro drivers — futures term structure, real yield shocks, and ETF flow dynamics — contain predictive information for future gold returns.
+
+### Methodology
+
+Three sub-phases across 545 total signals:
+
+- **016A (Term Structure):** 215 signals — GLD/GC=F spread as term structure proxy, individual GC futures contracts (available from Dec 2025 only), z-score, contango/backwardation, extreme decile, and quintile signals across 1d/5d/10d/20d/60d horizons.
+- **016B (Real Yield Shocks):** 160 signals — ^TNX yield changes, TIP ETF (real yield proxy), yield curve slope, regime-based shock detection (1σ and 2σ), TIP return quintiles.
+- **016C (ETF Flows):** 170 signals — GLD return quintiles, volume z-score, GLD-GC=F divergence, illiquidity proxy, flow-up/down binary signals.
+
+### Results
+
+| Test | Description | Pass Rate |
+|------|-------------|-----------|
+| T1 | p<0.05, SR>1.0, PF>1.30, N>20 | 136/545 (25.0%) |
+| T2 | Walk-forward (4 periods, all positive) | 26/136 (19.1%) |
+| T3 | Out-of-sample (pre-2021 train, post-2021 test) | 14/136 (10.3%) |
+| T4 | BH FDR correction | 414/545 (76.0%) |
+| T5 | Monte Carlo (5,000 permutations, p<0.05) | 38/136 (27.9%) |
+| T6 | Gold drift neutralization (alpha > 0) | 40/136 (29.4%) |
+
+### Verdict
+
+**No external driver edge survives full validation.**
+
+All 136 candidates fail at least one critical test. The walk-forward rate (19.1%) barely exceeds random expectation (6.25% for 4 periods). OOS degradation is severe — only 10.3% of candidates maintain positive returns post-2021 with <30% Sharpe decay. Monte Carlo shows 72.1% of candidates are indistinguishable from random sampling. Drift neutralization eliminates 70.6%.
+
+The structural limitation: longest available individual futures contracts cover only ~6 months (GCQ26.CMX, GCM26.CMX from Dec 2025), making term structure analysis over the full 25-year sample impossible. The GLD/GC=F spread proxy has an embedded expense ratio drift (0.40%/yr in GLD) that contaminates absolute levels.
+
+### Domain Closure
+
+With RESEARCH-016 complete, every major domain of publicly available gold market data has been systematically tested:
+
+1. **Price-only** (Phases 1-10): Returns, volatility, day-of-week, macro events, cross-asset, trend, mean reversion
+2. **Technical/Indicators** (Phase 11): RSI, MACD, Bollinger, envelope, regression — 0 edges
+3. **Holding Period** (Phase 16): 1d to 120d windows — 0 robust edges
+4. **Positioning** (Phases 17-18): COT disaggregated, 4 groups, 4 horizons, 440 signals — 0 edges
+5. **External Drivers** (Phase 19): Term structure, real yields, ETF flows — 0 edges
+
+---
+
+## Epilogue (Updated)
+
+After 19 phases, exhaustive testing across daily, intraday, holding-period, conditioning, positioning, and external driver domains, the answer remains unchanged: **XAU/USD contains no simple, statistically robust, tradeable edges using publicly available data.**
+
+Buy-and-hold gold (Sharpe 0.69) outperforms every conditional strategy, every indicator ensemble, every holding period twist, every positioning signal, and every macro driver signal tested.
+
+The four closest candidates — Silver→Gold (artifact), Model B at 60d (SR 0.81 but below 1.0 threshold), COT Bullish Divergence at 8w (confounded by trend), TS_GCQ26.CMX_1d Q5 (SR 16.40 but only 85 obs, fails WF/OOS/MC/drift) — all fail under rigorous validation.
+
+---
+
+## Technical Appendix (Updated)
+
+### Repository Structure
+```
+├── scripts/           # 17 Python research scripts
+├── reports/           # 21 Markdown research reports
+├── charts/            # 15 visualization PNGs
+├── data/              # 15 CSV datasets
+├── validasi.py        # Validation entry point
+├── .gitignore
+└── README.md
+```
+
+### Data Sources (Updated)
+| Source | Data | Period | Observations |
+|--------|------|--------|-------------|
+| Yahoo Finance (GC=F) | Gold Futures Daily | 2000-08-30 to 2026-06-08 | 6,466 |
+| Yahoo Finance (GC=F) | Gold Futures H1 | 2024-06-09 to 2026-06-08 | 11,395 |
+| Yahoo Finance (SI=F) | Silver Futures Daily | 2005-01-03 to 2026-06-08 | 6,461 |
+| Yahoo Finance (DX-Y.NYB) | DXY Daily | 2002-07-31 to 2026-06-08 | 5,978 |
+| Yahoo Finance (DX-Y.NYB) | DXY H1 | 2024-06-09 to 2026-06-08 | 11,876 |
+| Yahoo Finance (^TNX) | US10Y Daily | 1962-01-02 to 2026-06-08 | 16,123 |
+| Yahoo Finance (TIP) | TIPS ETF Daily | 2003-12-05 to 2026-06-05 | 5,660 |
+| Yahoo Finance (GLD) | Gold ETF Daily | 2004-11-18 to 2026-06-05 | 5,420 |
+| Yahoo Finance (IEF) | 7-10yr Treasury ETF Daily | 2002-07-26 to 2026-06-05 | 6,002 |
+| Yahoo Finance (^TYX) | US30Y Yield Daily | 1977-12-30 to 2026-06-08 | 12,353 |
+| Yahoo Finance (^IRX) | 13wk TBill Daily | 1962-01-02 to 2026-06-08 | 16,622 |
+| CFTC (fut_disagg) | COT Disaggregated Futures | 2006-06-13 to 2026-06-02 | 1,539 weeks |
+
+---
 
 *"The market can remain irrational longer than you can remain solvent." — John Maynard Keynes*

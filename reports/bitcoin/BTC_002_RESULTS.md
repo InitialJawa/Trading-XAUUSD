@@ -1,7 +1,68 @@
 # BTC-002: Funding Rate Research Results
 
+## Replication Update (BitMEX)
+
+**Critical finding: The 3 Gate.io survivors DO NOT replicate on independent BitMEX data.**
+
+| Gate.io Survivor | Gate.io Pass | BitMEX Pass | BitMEX Sharpe | Result |
+|-----------------|-------------|-------------|--------------|--------|
+| H1_FR_extreme_P5_LowFR_10d | 4/4 | 2/4 | 2.80 | FAILS to replicate |
+| H1_FR_extreme_P5_LowFR_20d | 4/4 | 2/4 | 2.29 | FAILS to replicate |
+| H4_FR_cum_5d_LowCum_1d | 4/4 | 2/4 | 2.06 | FAILS to replicate |
+
+All 3 pass MC and Drift on BitMEX but **fail WF and OOS** — not robust across time periods. The directional effect (low/negative funding → positive returns) is consistent on both exchanges, but specific signals are exchange-specific and time-dependent.
+
+### BitMEX Replication Details
+
+| Metric | Gate.io (2019-2026) | BitMEX (2016-2026) |
+|--------|-------------------|-------------------|
+| Trading days | 2,394 | 3,678 |
+| Funding records | 7,183 | 10,990 |
+| T1 candidates | 76 | 298 |
+| Valid masks | 25 | 298 |
+| WF pass | 13 | 148 |
+| OOS pass | 8 | 47 |
+| MC pass | 15 | 109 |
+| Drift pass | 25 | 197 |
+| Pass ALL 4 | 3 (not replicated) | 12 (all 60d trend artifacts) |
+
+### BitMEX Survivors
+
+On BitMEX, 12 signals pass all 4 tests — but **all are 60d horizon**, which is a known trend artifact pattern (same as BTC-001A). No short-horizon signal survives.
+
+| Signal | Ret% | Sharpe | PF | WR% | Assessment |
+|--------|------|--------|----|-----|-----------|
+| H3_FR_delta_1d_Q_Q1_60d | 22.7% | 1.21 | 4.48 | 65.3% | Trend artifact (60d) |
+| H3_FR_delta_1d_Q_Q5_60d | 22.0% | 1.22 | 4.60 | 65.9% | Trend artifact (60d) |
+| H3_FR_delta_1d_PosDelta_60d | 22.0% | 1.22 | 4.60 | 65.9% | Trend artifact (60d) |
+| H3_FR_delta_1d_NegDelta_60d | 22.7% | 1.21 | 4.48 | 65.4% | Trend artifact (60d) |
+| H3_FR_delta_3d_Q_Q1_60d | 21.9% | 1.19 | 4.53 | 64.4% | Trend artifact (60d) |
+| H3_FR_delta_3d_Q_Q5_60d | 21.1% | 1.15 | 4.23 | 65.8% | Trend artifact (60d) |
+| H3_FR_delta_3d_PosDelta_60d | 21.1% | 1.15 | 4.23 | 65.8% | Trend artifact (60d) |
+| H3_FR_delta_3d_NegDelta_60d | 21.9% | 1.19 | 4.53 | 64.4% | Trend artifact (60d) |
+| H4_FR_cum_5d_Q1_60d | 29.8% | 1.64 | 8.69 | 71.6% | Trend artifact (60d) |
+| H4_FR_cum_5d_LowCum_60d | 29.8% | 1.64 | 8.69 | 71.6% | Trend artifact (60d) |
+| H4_FR_cum_10d_Q1_60d | 29.3% | 1.69 | 8.94 | 72.8% | Trend artifact (60d) |
+| H4_FR_cum_10d_LowCum_60d | 29.3% | 1.69 | 8.94 | 72.8% | Trend artifact (60d) |
+
+### Revised Verdict
+
+**No robust, exchange-independent funding rate edge survives full validation.** The direction is consistent (low/negative funding predicts positive returns — the "short squeeze premium") and makes economic sense, but no specific signal holds up across both Gate.io and BitMEX data. The effect is exchange-specific and time-dependent.
+
+### Comparison vs BTC-001A (Price Structure)
+
+| Metric | BTC-001A (Price) | BTC-002 (Funding) |
+|--------|-----------------|-------------------|
+| Signals tested | 1,117 | 280 |
+| T1 candidates | 547 (247 non-VP) | 76 (Gate.io) |
+| Pass ALL 4 (Gate.io only) | 0 (trend artifacts) | 3 |
+| Replicated on BitMEX | N/A | 0/3 fail |
+| Economic basis | Price patterns (efficient) | Market microstructure |
+| Final verdict | No edge | No robust edge |
+
 **Data:** 2394 days (2019-11-18 to 2026-06-07)
 **Instrument:** BTC-USD (Bitcoin) with Gate.io BTC_USDT perpetual funding rates
+**Replication:** BitMEX XBTUSD perpetual (2016-05-14 to 2026-06-08, 3678 days, 10990 records)
 **Funding rate source:** Gate.io API (8h frequency, resampled to daily)
 **Ann. Volatility:** 60.2%
 **Ann. Sharpe:** 0.8203
@@ -23,23 +84,23 @@
 **OOS PASS:** 8 / 25
 **MC PASS:** 15 / 25
 **Drift Neutralization PASS:** 25 / 25
-**Pass ALL 4 tests:** 3 / 25
+**Pass ALL 4 tests:** 3 / 25 (NOT replicated on BitMEX)
 
 ## Verdict
 
-**3 funding rate signals survive full validation — an edge distinct from anything found in Gold.**
+**3 funding rate signals survive Gate.io validation but NONE replicate on BitMEX — no robust exchange-independent edge.**
 
-### Survivors (pass all 4 tests)
+### Survivors (pass all 4 tests on Gate.io, fail replication)
 
-| Signal | Description | N | Ret% | Sharpe | PF | WR% |
-|--------|------------|---|------|--------|----|-----|
-| H1_FR_extreme_P5_LowFR_10d | Bottom 5% funding → hold 10d | 120 | 4.0% | 2.51 | 3.26 | 65.0% |
-| H1_FR_extreme_P5_LowFR_20d | Bottom 5% funding → hold 20d | 120 | 7.2% | 2.20 | 4.35 | 65.8% |
-| H4_FR_cum_5d_LowCum_1d | Bottom 20% cumulative 5d → hold 1d | 478 | 0.4% | 2.53 | 1.48 | 54.4% |
+| Signal | Description | N | Ret% | Sharpe | PF | WR% | Replicated? |
+|--------|------------|---|------|--------|----|-----|------------|
+| H1_FR_extreme_P5_LowFR_10d | Bottom 5% funding → hold 10d | 120 | 4.0% | 2.51 | 3.26 | 65.0% | No (2/4 on BitMEX) |
+| H1_FR_extreme_P5_LowFR_20d | Bottom 5% funding → hold 20d | 120 | 7.2% | 2.20 | 4.35 | 65.8% | No (2/4 on BitMEX) |
+| H4_FR_cum_5d_LowCum_1d | Bottom 20% cumulative 5d → hold 1d | 478 | 0.4% | 2.53 | 1.48 | 54.4% | No (2/4 on BitMEX) |
 
 ### Economic Interpretation
 
-All 3 survivors share the same logic: **low/negative funding predicts positive returns**. When shorts pay longs excessively (negative funding rates), shorts are underwater and forced to cover, creating upward price pressure. This is a genuine short-squeeze premium — a market microstructure signal unavailable in traditional assets like Gold.
+All 3 survivors share the same logic: **low/negative funding predicts positive returns**. When shorts pay longs excessively (negative funding rates), shorts are underwater and forced to cover, creating upward price pressure. This is a genuine short-squeeze premium — a market microstructure signal unavailable in traditional assets like Gold. However, the effect is exchange-specific and not robust enough to survive cross-exchange replication.
 
 ### Comparison vs BTC-001A (Price Structure)
 
@@ -47,9 +108,10 @@ All 3 survivors share the same logic: **low/negative funding predicts positive r
 |--------|-----------------|-------------------|
 | Signals tested | 1,117 | 280 |
 | T1 candidates | 547 (247 non-VP) | 76 |
-| Pass ALL 4 | 0 (trend artifacts only) | 3 (genuine edge) |
+| Pass ALL 4 (Gate.io) | 0 (trend artifacts) | 3 |
+| Replicated on BitMEX | N/A | 0/3 |
 | Economic basis | Price patterns (efficient) | Market microstructure |
-| Replication needed | N/A | Yes — test on Binance/Bybit data |
+| Final verdict | No edge | No robust edge |
 
 ## T1 Candidates
 

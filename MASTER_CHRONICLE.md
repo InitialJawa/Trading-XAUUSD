@@ -301,6 +301,53 @@ But for the question this framework was built to answer — *does XAU/USD have a
 
 ---
 
+## Phase 16 — Signal Persistence & Holding Period Analysis (RESEARCH-013)
+
+**Script:** `research_013_signal_persistence.py`
+**Reports:** 6 (A–E + Master)
+**Date:** 2026-06-08
+**Status:** COMPLETE — 0 edges
+
+### Hypothesis
+
+The 6 indicator-based models from RESEARCH-012 all failed at the 1-day horizon. But medium-term information might be invisible in 1-day tests. RESEARCH-013 tested whether these same signals contain predictive information at holding periods from 1 to 60 days.
+
+### Methodology
+
+- Same 6 models from RESEARCH-012 (Trend Following, Trend Pullback, Mean Reversion Extreme, Volatility Expansion, Breakout Confirmation, Consensus)
+- 9 holding periods: 1d, 2d, 3d, 5d, 10d, 15d, 20d, 30d, 60d
+- Overlapping forward returns with block bootstrap Monte Carlo (10,000 permutations, block size = holding period)
+- Sharpe correctly annualized for each holding period
+
+### Bug Fixes During Execution
+
+The initial run contained two critical bugs discovered during validation:
+1. **Sharpe annualization error:** Used `sqrt(252)` for all holding periods instead of `sqrt(252/d)`, inflating Sharpe by up to 7.75× at 60d
+2. **MC validation scoping error:** Only ran at 1d, with MC_p defaulting to 0.0 for all longer horizons — producing 4 false-positive "passes"
+
+Both bugs were corrected before final results.
+
+### Results: 0/6 Models Pass All Criteria
+
+| Model | Best Hold | Sharpe | PF | MC p |
+|-------|-----------|--------|----|-------|
+| A — Trend Following | 1d | 0.67 | 1.13 | 0.1548 |
+| B — Trend Pullback | 60d | 0.81 | 2.73 | 0.0000 |
+| C — Mean Reversion Extreme | 5d | 0.52 | 1.23 | 0.1428 |
+| D — Volatility Expansion | 10d | 0.11 | 1.06 | 0.3668 |
+| E — Breakout Confirmation | 1d | 0.45 | 1.10 | 0.3725 |
+| F — Consensus | 60d | 0.35 | 1.54 | 0.0310 |
+
+### Statistical Significance ≠ Economic Viability
+
+Three models (B, C, F) show MC p < 0.05 at peak hold, meaning directional signals contain non-random information. But no model reaches Sharpe > 1.0. Best Sharpe is Model B at 60d (0.81), yet Buy & Hold gold (0.69) still nearly matches it without any timing effort.
+
+### Conclusion
+
+**Extending holding periods to 10–60 days does not unlock a hidden edge.** Weak directional information exists in some technical signals at medium-term horizons, but the signal-to-noise ratio is too low for any economically viable strategy. This confirms and extends RESEARCH-001 through RESEARCH-012: XAU/USD does not contain simple, exploitable statistical patterns at any holding period from 1 to 60 days.
+
+---
+
 *End of Master Chronicle. Research conducted June 2026. All scripts reproducible. All reports generated automatically. No guarantee of future market behavior.*
 
 *"The market can remain irrational longer than you can remain solvent." — John Maynard Keynes*

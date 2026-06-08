@@ -1,0 +1,1 @@
+"""Multi-Asset Research Framework — instrument-agnostic validation engine."""

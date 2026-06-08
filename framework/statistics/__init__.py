@@ -1,0 +1,1 @@
+"""Statistical utilities: t-tests, Sharpe, PF, WR, monotonicity."""

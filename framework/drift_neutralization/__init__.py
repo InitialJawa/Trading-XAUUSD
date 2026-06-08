@@ -1,0 +1,1 @@
+"""Drift neutralization: alpha vs buy-and-hold benchmarking."""

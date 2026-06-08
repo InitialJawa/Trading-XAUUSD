@@ -1,0 +1,1 @@
+"""Report generation: Markdown tables, LaTeX, summary statistics."""

@@ -45,6 +45,19 @@ reports/
 
 master_chronicle/
     GOLD_MASTER_CHRONICLE.md   Gold research narrative (19 phases)
+
+trading_bot/                        Live trading bot pipeline
+    collectors/         Fetch XAUUSD prices & calculate indicators
+    signals/            RSI, MACD, MA crossover, Momentum signals
+    trading/            MT5 connector, order executor, risk manager
+    backtesting/        Archive snapshots & performance metrics
+    dashboard/          HTML dashboard
+    config/             Settings & signal weights
+    utils/              Config loader & logger
+    run_pipeline.py     Pipeline orchestrator
+
+automation/
+    run_bot.sh          Shell script for cron/systemd
 ```
 
 ## Gold Research Summary (v1.0 — Complete)
@@ -57,10 +70,35 @@ After 19 phases of systematic testing across price-derived, indicator-derived, p
 
 All validation components are designed to be instrument-agnostic. The same pipeline used for gold (walk-forward, OOS, Monte Carlo, FDR, drift neutralization, monotonicity) applies directly to any asset.
 
+## Trading Bot (Live)
+
+Pipeline otomatis untuk trading XAUUSD via MetaTrader 5:
+
+```
+python -m trading_bot.run_pipeline              # data + signals + dashboard
+python -m trading_bot.run_pipeline --trade       # + eksekusi order
+python -m trading_bot.run_pipeline --daemon      # loop setiap jam
+```
+
+### Konfigurasi
+
+Edit `trading_bot/config/settings.json`:
+- `mt5.login`, `mt5.password`, `mt5.server` — kredensial MT5
+- `risk.max_risk_per_trade` — risiko per trade (%)
+
+### Automation (cron)
+
+```bash
+crontab -e
+# setiap jam
+0 * * * * /path/to/automation/run_bot.sh --trade
+```
+
 ## Requirements
 
-- Python 3.14+
+- Python 3.10+
 - pandas, numpy, scipy, matplotlib, yfinance, scikit-learn, requests
+- MetaTrader5 (untuk live trading)
 
 ## License
 

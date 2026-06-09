@@ -1,0 +1,7 @@
+{
+    "rsi": 0.25,
+    "macd": 0.25,
+    "ma_crossover": 0.20,
+    "momentum": 0.15,
+    "bollinger": 0.15
+}
